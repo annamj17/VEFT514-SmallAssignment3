@@ -20,22 +20,19 @@ const service = () => {
     /****** CANDY ******/
 
     // Gets all candies within the application
-    // DONE -> WORKS
     const getAllCandy = () => candies;
 
     // Creates a new candy and returns status code 201 created
-    // DONE -> WORKS
     const createCandy = (candy) => {
         let highestId = 0;
-        candies.map(c => {if (c.id > highestId) {highestId = c.id;} });
-        const {id = highestId + 1, name, description} = candy;
-        const createdCandy = {id, name, description, };
+        candies.map(c => { if (c.id > highestId) { highestId = c.id; } });
+        const { id = highestId + 1, name, description } = candy;
+        const createdCandy = { id, name, description, };
         candies.push(createdCandy);
         return createdCandy;
     };
 
     // Fetches candy after Id
-    // DONE -> WORKS
     const getCandyById = (id) => {
         var candy = candies.filter(g => g.id == id);
         return candy;
@@ -44,7 +41,6 @@ const service = () => {
     /****** OFFER ******/
 
     // Gets all offers with nested candies within the offer object
-    // DONE -> WORKS
     const getAllOffers = () => {
         const getCandies = candies.map(candy => new Candy(candy.id, candy.name, candy.description));
         const getOffers = offers.map(offer => {
@@ -59,7 +55,6 @@ const service = () => {
     /****** PINATA ******/
 
     // Gets all pinatas within the application excluding "surprise"
-    // DONE -> WORKS
     const getAllPinatas = () => {
         const getAllButSurprise = new Array();
         const getPinatas = pinatas;
@@ -76,24 +71,23 @@ const service = () => {
     };
 
     // Gets a pinata with a certain id excluding "surprise"
-    // DONE -> WORKS
     const getPinataById = (id) => {
         const pinata = getAllPinatas().filter(p => p.id == id);
         return pinata;
     };
 
     // Creates a new pinata and returns status code 201 created
-    // DONE -> WORKS
     const createPinata = (pinata) => {
         let highestId = 0;
-        pinatas.map(c => {if (c.id > highestId) {highestId = c.id;} });
-        const {id = highestId + 1, name, surprise = "", maximumHits, numberOfHits = 0} = pinata;
-        const newPinata = {id, name, surprise, maximumHits, numberOfHits};
+        pinatas.map(c => { if (c.id > highestId) { highestId = c.id; } });
+        const { id = highestId + 1, name, surprise = "", maximumHits } = pinata;
+        const newPinata = { id, name, surprise, maximumHits };
         pinatas.push(newPinata);
         return newPinata;
     };
 
-    const hitThePinata = (id, err204) => {
+    // Hits a certain pinata until its hit limit has been reachedv
+    const hitThePinata = (id) => {
         const idIndex = (Object.values(id) - 1);
 
         if (pinatas[idIndex].maximumHits == 0) {
@@ -101,7 +95,7 @@ const service = () => {
             var ending = url.substr(url.lastIndexOf('.') + 1);
             if (ending === "jpg" || ending === "png" || ending === "jpeg") {
                 var filename = url.substring(url.lastIndexOf('/') + 1);
-                filename = `./images/${ filename }`;
+                filename = `./images/${filename}`;
                 download(url, filename);
                 function download(url, filename) {
                     request(url)
@@ -109,7 +103,7 @@ const service = () => {
                 }
             }
             else {
-                fs.appendFile('surprise.txt', pinatas[idIndex].surprise, function(err) {
+                fs.appendFile('surprise.txt', pinatas[idIndex].surprise, function (err) {
                     console.log(err);
                 });
                 pinatas[idIndex].maximumHits = pinatas[idIndex].maximumHits - 1;
@@ -122,8 +116,6 @@ const service = () => {
         pinatas[idIndex].maximumHits = pinatas[idIndex].maximumHits - 1;
         return false;
     };
-
-
 
     return {
         getAllCandy,

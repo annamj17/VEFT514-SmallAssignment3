@@ -1,11 +1,9 @@
 const service = require('./services/service');
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 
 const internalServerError = (res, err) => res.status(500).send(`Internal server error occurred.\n message: \n${ err.message }`);
-
 
 app.use(bodyParser.json());
 
@@ -63,7 +61,6 @@ app.get('/api/pinatas/:id', function(req, res) {
     return res.json(pinata);
 });
 
-
 // http://localhost:3000/api/pinatas     [POST]
 // Create a new pinata and returns status code 201 created
 // Should also include a surprise property which can be either
@@ -82,7 +79,6 @@ app.patch('/api/pinatas/:id/hit', function(req, res) {
     if (!pinata) {return res.status(404).send('Id not found');}
     var outcome = service.hitThePinata({id});
     if (typeof outcome === "boolean" && !outcome) {
-        console.log(outcome);
         return res.status(200).end();
     }
     else if (typeof outcome === "boolean" && outcome) {
