@@ -1,6 +1,5 @@
 {
-    "candies": [
-        {
+    "candies": [{
             "id": 1,
             "name": "Snowkers",
             "description": "Similar to Snickers but white as the snow."
@@ -26,20 +25,18 @@
             "description": "M&M has made itself a powerful enemy.. We call it Zett-N-Zetts!"
         }
     ],
-    "offers": [
-        {
+    "offers": [{
             "id": 1,
             "name": "Two unique",
-            "candies": [ 1, 2 ]
+            "candies": [1, 2]
         },
         {
             "id": 2,
             "name": "The Last of Us",
-            "candies": [ 3, 4, 5 ]
+            "candies": [3, 4, 5]
         }
     ],
-    "pinatas": [
-        {
+    "pinatas": [{
             "id": 1,
             "name": "Wheaty",
             "surprise": "5 kg of Z&Zs!",
@@ -50,6 +47,12 @@
             "name": "Snappy",
             "surprise": "Two meters of Brix!",
             "maximumHits": 10
+        },
+        {
+            "id": 3,
+            "name": "Villikottur",
+            "surprise": "http://freyja.is/wp-content/uploads/2017/05/Villikottur-4.jpg",
+            "maximumHits": 2
         }
     ]
 }

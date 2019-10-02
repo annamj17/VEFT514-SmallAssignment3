@@ -4,31 +4,34 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 
+const internalServerError = (res, err) => res.status(500).send(`Internal server error occurred.\n message: \n${ err.message }`);
+
+
 app.use(bodyParser.json());
 
 /****** CANDY ******/
 
 // http://localshost:3000/api/candies     [GET]
 // Gets all candies within the application
-app.get('/api/candies', function (req, res) {
+app.get('/api/candies', function(req, res) {
     return res.json(service.getAllCandy());
 });
 
 // http://localshost:3000/api/candies    [POST]
 // Creates a new candy and returns status code 201 created
-app.post('/api/candies', function (req, res) {
-    const { body } = req;
+app.post('/api/candies', function(req, res) {
+    const {body} = req;
     const createdCandy = service.createCandy(body);
-    if (!createdCandy) { return res.status(412).json(body); }
+    if (!createdCandy) {return res.status(412).json(body);}
     return res.status(201).json(createdCandy);
 });
 
 // http://localshost:3000/api/1     [GET]
 // Gets candy after Id
-app.get('/api/candies/:id', function (req, res) {
-    const { id } = req.params;
+app.get('/api/candies/:id', function(req, res) {
+    const {id} = req.params;
     const candy = service.getCandyById(id);
-    if (!candy) { return res.status(404).send('Id not found'); }
+    if (!candy) {return res.status(404).send('Id not found');}
     return res.json(candy);
 });
 
@@ -37,7 +40,7 @@ app.get('/api/candies/:id', function (req, res) {
 // http://localhost:3000/api/offers     [GET]
 // Gets all offers within the application and the output should include the
 // nested candies within the offer object as seen in the Model Structure section
-app.get('/api/offers', function (req, res) {
+app.get('/api/offers', function(req, res) {
     return res.json(service.getAllOffers());
 });
 
@@ -46,17 +49,17 @@ app.get('/api/offers', function (req, res) {
 // http://localhost:3000/api/pinatas     [GET]
 // Gets all pinatas within the application
 // Should contain all properties excluding surprise
-app.get('/api/pinatas', function (req, res) {
+app.get('/api/pinatas', function(req, res) {
     return res.json(service.getAllPinatas());
 });
 
 // http://localhost:3000/api/pinatas/1
 // Gets a pinata with a certain id
 // Should contain all properties excluding surprise
-app.get('/api/pinatas/:id', function (req,res) {
-    const { id } = req.params;
+app.get('/api/pinatas/:id', function(req, res) {
+    const {id} = req.params;
     const pinata = service.getPinataById(id);
-    if (!pinata) { return res.status(404).send('Id not found'); }
+    if (!pinata) {return res.status(404).send('Id not found');}
     return res.json(pinata);
 });
 
@@ -65,21 +68,30 @@ app.get('/api/pinatas/:id', function (req,res) {
 // Create a new pinata and returns status code 201 created
 // Should also include a surprise property which can be either
 // a written text or an URL to a valid image
-app.post('/api/pinatas', function (req, res) {
-    const { body } = req;
+app.post('/api/pinatas', function(req, res) {
+    const {body} = req;
     const createdPinata = service.createPinata(body);
-    if (!createdPinata) { return res.status(412).json(body); }
+    if (!createdPinata) {return res.status(412).json(body);}
     return res.status(201).json(createdPinata);
 });
 
 // http://localhost:3000/api/pinatas/1/hit    [PATCH]
-app.patch('/api/pinatas/:id/hit', function (req, res) {
-
+app.patch('/api/pinatas/:id/hit', function(req, res) {
+    const {id} = req.params;
+    const pinata = service.getPinataById(id);
+    if (!pinata) {return res.status(404).send('Id not found');}
+    var outcome = service.hitThePinata({id});
+    if (typeof outcome === "boolean" && !outcome) {
+        console.log(outcome);
+        return res.status(200).end();
+    }
+    else if (typeof outcome === "boolean" && outcome) {
+        return res.status(423).end();
+    }
+    return res.status(201).json(outcome);
 });
 
-
-
 // http://localhost:3000
-app.listen(3000, function () {
+app.listen(3000, function() {
     console.log('Server is listening on port 3000');
 });
